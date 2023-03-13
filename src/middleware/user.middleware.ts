@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { isObjectIdOrHexString } from "mongoose";
 
 import { ApiError } from "../error/api.error";
-import { userService } from "../service/user.service";
+import { User } from "../model/user.model";
+import { userService } from "../service";
 import { UserValidator } from "../validator";
 
 class UserMiddleware {
@@ -78,6 +79,69 @@ class UserMiddleware {
     } catch (e) {
       next(e);
     }
+  }
+
+  public async isLoginValid(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const { error } = UserValidator.loginUser.validate(req.body);
+
+      if (error) {
+        next(new ApiError(error.message, 400));
+      }
+
+      next();
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public getDynamicallyAndThrow(
+    fieldName: string,
+    from: "body" | "query" | "params" = "body",
+    dbField = fieldName
+  ) {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const fieldValue = req[from][fieldName];
+
+        const foundField = await User.findOne({ [dbField]: fieldValue });
+
+        if (foundField) {
+          next(new ApiError(`This ${fieldValue} already exist`, 409));
+        }
+
+        next();
+      } catch (e) {
+        next(e);
+      }
+    };
+  }
+  public getDynamicallyOrThrow(
+    fieldName: string,
+    from: "body" | "query" | "params" = "body",
+    dbField = fieldName
+  ) {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const fieldValue = req[from][fieldName];
+
+        const user = await User.findOne({ [dbField]: fieldValue });
+
+        if (!user) {
+          next(new ApiError(`User not found`, 422));
+        }
+
+        req.res.locals = user;
+
+        next();
+      } catch (e) {
+        next(e);
+      }
+    };
   }
 }
 

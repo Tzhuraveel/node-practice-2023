@@ -1,16 +1,16 @@
 import { Router } from "express";
 
-import { userController } from "../controller/user.controller";
-import { userMiddleware } from "../middleware/user.middleware";
+import { userController } from "../controller";
+import { authMiddleware } from "../middleware";
+import { userMiddleware } from "../middleware";
 
 const router = Router();
 
 router.get("/", userController.getAll);
 
-router.post("/", userMiddleware.isUserValidCreate, userController.create);
-
 router.get(
   "/:userId",
+  authMiddleware.checkAccessToken,
   userMiddleware.isUserIdValid,
   userMiddleware.getByIdHandlerError,
   userController.getById
@@ -18,6 +18,7 @@ router.get(
 
 router.delete(
   "/:userId",
+  authMiddleware.checkAccessToken,
   userMiddleware.isUserIdValid,
   userMiddleware.getByIdHandlerError,
   userController.delete
@@ -25,6 +26,7 @@ router.delete(
 
 router.put(
   "/:userId",
+  authMiddleware.checkAccessToken,
   userMiddleware.isUserIdValid,
   userMiddleware.isUserValidUpdate,
   userMiddleware.getByIdHandlerError,

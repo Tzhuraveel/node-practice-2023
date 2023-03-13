@@ -5,4 +5,6 @@ config();
 export const configs = {
   PORT: process.env.PORT,
   DB_URL: process.env.DB_URL,
+  ACCESS: process.env.ACCESS,
+  REFRESH: process.env.REFRESH,
 };
