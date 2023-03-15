@@ -16,6 +16,7 @@ class AuthMiddleware {
 
       if (!accessToken) {
         next(new ApiError("No token", 401));
+        return;
       }
 
       const jwtPayload = tokenService.checkToken(
@@ -26,6 +27,7 @@ class AuthMiddleware {
 
       if (!foundToken) {
         next(new ApiError("Token not valid", 401));
+        return;
       }
 
       req.res.locals = { foundToken, jwtPayload };

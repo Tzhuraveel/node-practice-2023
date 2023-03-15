@@ -1,9 +1,10 @@
 import { Router } from "express";
 
 import { userController } from "../controller";
-import { EAction, EUserValidator } from "../enum";
+import { EAction } from "../enum";
 import { userMiddleware } from "../middleware";
 import { authMiddleware } from "../middleware/auth.middleware";
+import { UserValidator } from "../validator";
 
 const router = Router();
 
@@ -38,7 +39,7 @@ router.delete(
 router.put(
   "/:userId",
   userMiddleware.iValidId,
-  userMiddleware.isValidBody(EUserValidator.UPDATE),
+  userMiddleware.isValidBody(UserValidator.updateUser),
   authMiddleware.checkAccessToken,
   userMiddleware.getDynamicallyAndThrow(
     EAction.NEXT,

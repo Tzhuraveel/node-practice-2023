@@ -1,16 +1,16 @@
 import { NextFunction, Request, Response } from "express";
+import { ObjectSchema } from "joi";
 import { isObjectIdOrHexString } from "mongoose";
 
-import { EAction, EUserValidator } from "../enum";
+import { EAction } from "../enum";
 import { ApiError } from "../error";
 import { userService } from "../service";
-import { UserValidator } from "../validator";
 
 class UserMiddleware {
-  public isValidBody(typeOfValid: EUserValidator) {
+  public isValidBody(typeOfValid: ObjectSchema) {
     return (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { error, value } = UserValidator[typeOfValid].validate(req.body);
+        const { error, value } = typeOfValid.validate(req.body);
 
         if (error) {
           next(new ApiError(error.message, 400));
