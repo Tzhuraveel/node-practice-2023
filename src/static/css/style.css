@@ -1,0 +1,30 @@
+.header{
+    text-align: center;
+    width: 100%;
+    margin: 30px 0;
+    font-size: 30px;
+    color: darkslategrey;
+    font-weight: 700;
+    background-color: wheat;
+}
+.container-body{
+    height: 100px;
+    width: 100%;
+    background-color: wheat;
+}
+.container-button{
+    display: flex;
+    background-color: wheat;
+    align-content: center;
+    justify-content: center;
+    height: 100px;
+    width: 100%;
+}
+.forgot-password-button{
+    min-width: 100px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: darkslategrey;
+}
