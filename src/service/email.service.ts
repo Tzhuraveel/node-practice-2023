@@ -6,7 +6,7 @@ import nodemailer from "nodemailer";
 import { configs } from "../config";
 import { EEmailAction } from "../enum";
 import { emailTemplates } from "../template/email.template";
-import { IUser } from "../type";
+import { IUser, IUserFromMongo } from "../type";
 class EmailService {
   private transporter;
   private templateParser;
@@ -36,7 +36,7 @@ class EmailService {
   }
 
   public async sendMail(
-    user: IUser,
+    user: IUser | IUserFromMongo,
     emailAction: EEmailAction,
     locals: Record<string, string> = {}
   ) {

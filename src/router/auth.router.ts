@@ -54,6 +54,7 @@ router.put(
   "/forgot/password/:token",
   commonMiddleware.isValidBody(UserValidator.updateForgotPassword),
   authMiddleware.checkActionToken(EActionTokenType.FORGOT),
+  authMiddleware.checkOldPassword,
   authController.updateForgotPassword
 );
 

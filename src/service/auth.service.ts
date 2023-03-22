@@ -1,6 +1,6 @@
 import { EActionTokenType, EEmailAction, EUserStatus } from "../enum";
 import { ApiError } from "../error";
-import { Action, Token, User } from "../model";
+import { Action, OldPassword, Token, User } from "../model";
 import {
   ITokenInfo,
   ITokenInfoForgotAndActivate,
@@ -125,6 +125,9 @@ class AuthService {
     tokenInfo: ITokenInfoForgotAndActivate
   ): Promise<void> {
     try {
+      const user = await userService.getById(tokenInfo._user_id);
+      await OldPassword.create({ _user_id: user._id, password: user.password });
+
       const hashedPassword = await passwordService.hash(password);
 
       await Promise.all([

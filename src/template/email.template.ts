@@ -5,7 +5,7 @@ export const emailTemplates: {
 } = {
   [EEmailAction.WELCOME]: {
     subject: "We are very happy, that you with us now",
-    templateName: "register",
+    templateName: "welcome",
   },
   [EEmailAction.FORGOT_PASSWORD]: {
     subject: "Don't worry! You will be able to create new Password",
